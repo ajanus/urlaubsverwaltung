@@ -12,6 +12,7 @@
 <head>
     <uv:head/>
     <script type="text/javascript">
+    
         $(document).ready(function() {
 
             $("table.sortable").tablesorter({
@@ -34,8 +35,24 @@
                     return node.innerHTML;
                 }
             });
+            
+            $("#csvExportLink").click(function() {
+            	
+            	if (!sessionStorage.getItem('originalHref'))
+            	{
+            		sessionStorage.setItem('originalHref', $(this).attr("href"));
+            	};
 
+            	var sorting = $('#statisticsTable')[0].config.sortList[0];
+
+            	var columnNo = sorting[0];
+            	var sortOrder = sorting[1];
+            	
+            	$(this).attr("href", sessionStorage.getItem('originalHref')  + "&orderColumn=" + columnNo + "&sortOrder=" + sortOrder);
+            });
+            
         });
+        
     </script>
 </head>
 
@@ -88,7 +105,7 @@
                         </div>
                     </c:when>
                     <c:otherwise>
-                        <table cellspacing="0" class="list-table sortable tablesorter">
+                        <table cellspacing="0" class="list-table sortable tablesorter" id="statisticsTable">
                             <thead class="hidden-xs hidden-sm">
                             <tr>
                                 <th class="hidden-print"><%-- placeholder to ensure correct number of th --%></th>
@@ -100,6 +117,7 @@
                                 <th class="sortable-field"><spring:message code="applications.statistics.allowed"/></th>
                                 <th class="sortable-field"><spring:message code="applications.statistics.waiting"/></th>
                                 <th class="sortable-field"><spring:message code="applications.statistics.left"/> (<c:out value="${from.year}" />)</th>
+                                <th class="sortable-field"><spring:message code="applications.statistics.entitlement"/></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -153,6 +171,10 @@
                                         <br />
                                         <b><uv:number number="${statistic.leftOvertime}"/></b>
                                         <spring:message code="duration.overtime"/>
+                                    </td>
+                                     <td class="hidden-xs">
+                                        <b class="sortable"><uv:number number="${statistic.entitlementVacationDays}"/></b>
+                                        <spring:message code="duration.vacationDays"/>
                                     </td>
                                 </tr>
                             </c:forEach>
