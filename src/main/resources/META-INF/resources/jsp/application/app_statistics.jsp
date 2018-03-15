@@ -16,7 +16,7 @@
         $(document).ready(function() {
 
             $("table.sortable").tablesorter({
-                sortList: [[1, 0]],
+                sortList: [[2, 0]],
                 headers: {
                     0: {sorter: false},
                     3: {sorter: false},
